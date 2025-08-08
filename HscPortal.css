@@ -53,6 +53,44 @@ body {
 }
 
 /* ========== 活動區/公告區 (上半區) ========== */
+/* 讓 slide 自己吃滿容器高度 */
+.visual-swiper .swiper-slide { height: 100%; }
+/* 圖片＋說明容器 */
+.visual-swiper .slide-figure {
+  margin: 0;
+  position: relative;
+  overflow: hidden;              /* 讓圓角一起裁切 */
+  border-radius: 12px;
+  height: 100%;                  /* 吃滿 slide 高度 */
+}
+
+/* 只針對主視覺的圖片（避免被全域 .swiper-slide img 影響） */
+.visual-swiper .slide-figure img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;             /* 想完整不裁切可改 contain */
+  /* 覆蓋全域的陰影/邊框/圓角，避免影響 caption 疊放 */
+  box-shadow: none;
+  border: none;
+  border-radius: 0;
+}
+
+/* 底部說明條（一定疊在最上層） */
+.visual-swiper .slide-caption {
+  position: absolute;
+  left: 0; right: 0; bottom: 0;
+  padding: 10px 14px;
+  background: rgba(0,0,0,.65);
+  color: #fff;
+  font-size: 14px;
+  line-height: 1.5;
+  backdrop-filter: blur(2px);
+  z-index: 2;                    /* 關鍵：蓋過圖片 */
+}
+/* 保留你原本的容器設定 */
 .swiper-container {
   position: relative;
   width: 100%;
@@ -62,6 +100,7 @@ body {
   box-shadow: 0 2px 10px #0001;
   background: #fff;
 }
+/* 全域的圖片樣式保留給其他 swiper 用，不影響主視覺 */
 .swiper-slide img {
   width: 100%;
   height: 100%;
@@ -71,6 +110,7 @@ body {
   box-shadow: 0 3px 12px #a5dee533;
   border: 1.5px solid #e1f3f6;
 }
+
 /* Swiper Button 共用 */
 .swiper-button-next,
 .swiper-button-prev {
@@ -94,14 +134,16 @@ body {
 .swiper-button-prev:after {
   font-size: 24px;
 }
+
 /* 個別定位 */
-.visual-swiper .swiper-button-next { right: 12px !important; left: auto;}
-.visual-swiper .swiper-button-prev { left: 12px !important; right: auto;}
+.visual-swiper .swiper-button-next { right: 12px !important; left: auto; }
+.visual-swiper .swiper-button-prev { left: 12px !important; right: auto; }
 .book-swiper .swiper-button-next,
-.theme-swiper .swiper-button-next { right: 3px !important; left: auto;}
+.theme-swiper .swiper-button-next { right: 3px !important; left: auto; }
 .book-swiper .swiper-button-prev,
-.theme-swiper .swiper-button-prev { left: 3px !important; right: auto;}
-/* Swiper 分頁點點 */
+.theme-swiper .swiper-button-prev { left: 3px !important; right: auto; }
+
+/* 分頁點點 */
 .swiper-pagination { bottom: 12px !important; }
 .book-swiper-pagination .swiper-pagination-bullet,
 .theme-swiper-pagination .swiper-pagination-bullet {
@@ -132,7 +174,11 @@ body {
   justify-content: space-between;
 }
 .swiper-container.visual-swiper { padding: 0; }
-
+/* 只讓標題連結吃彈性寬度，避免把按鈕擠掉 */
+.announcement-list > li > a:not(.announce-action-btn) {
+  flex: 1 1 auto !important;
+  min-width: 0;                 /* 讓省略號生效 */
+}
 .announcement-card h2 {
   font-size: 22px;
   color: #21a0a4;
@@ -193,16 +239,26 @@ body {
   color: #0abac7;
 }
 .announce-action-btn {
-  width: 38px; height: 38px; padding: 0;
-  border: none; background: #fff;
-  border-radius: 50%; box-shadow: 0 2px 8px #169bc944, 0 0 0 1.5px #e2e6ea;
-  cursor: pointer;
-  display: flex; align-items: center; justify-content: center;
-  transition: box-shadow .18s, background .18s;
-  flex-shrink: 0;
-  margin-left: auto;
-  margin-left: 12px;           /* ← 新增 */
-  flex: 0 0 38px;              /* ← 新增：不讓 flex 壓縮按鈕 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 40px !important;
+  max-width: 40px !important;
+  flex: 0 0 40px !important;
+
+  padding: 0 !important;        /* ← 清掉 button 預設 padding */
+  box-sizing: border-box !important;
+
+  background: #fff !important;
+  border: 2px solid #e2e6ea !important;
+  border-radius: 50% !important;
+  box-shadow: 0 2px 8px #169bc944 !important;
+
+  text-decoration: none !important;
+  cursor: pointer !important;
 }
 .announce-action-btn:hover {
   background: #f1fbff;
@@ -394,7 +450,12 @@ body {
   .announcement-card { padding: 20px 12px 16px 16px; }
   .announcement-list .date { min-width: 56px; font-size: 12px; }
   .announcement-list a { font-size: 14px; padding: 0 3px 0 0; max-width: 120px; }
-  .announce-action-btn { width: 28px; height: 28px; margin-left: 4px; }
+  .announce-action-btn {     
+    width: 34px !important;
+    height: 34px !important;
+    min-width: 34px !important;
+    max-width: 34px !important;
+    flex-basis: 34px !important; }
   .announce-action-btn svg, .announce-action-btn img { width: 20px; height: 20px; }
   .footer-bar { min-height: 110px; }
   .footer-floating, .footer-gotop { position: static; margin: 10px 0 0 0; display: none !important; }

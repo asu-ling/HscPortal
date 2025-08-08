@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <title>公告詳情</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="HscPortal.css" />
+  <style>
+    .detail-wrap{
+      width: min(70vw, 1100px);
+      margin: 40px auto;
+      background:#fff;
+      border-radius: 14px;
+      box-shadow: 0 6px 28px #00000010;
+      padding: 28px 32px;
+    }
+    .detail-title{
+      font-size: 28px;
+      font-weight: 800;
+      color:#245a60;
+      margin: 6px 0 12px 0;
+      line-height: 1.35;
+    }
+    .detail-date{
+      color:#8aa2a5;
+      font-size: 14px;
+      letter-spacing: .5px;
+      margin-bottom: 18px;
+    }
+
+    /* 多張圖片容器 */
+    .detail-images{
+      display: flex;
+      flex-direction: column;
+      gap: 20px;            /* 圖片之間的間距 */
+      margin: 10px 0 22px 0;
+    }
+    /* 每張圖片的樣式 */
+    .detail-cover{
+      width: 100%;
+      height: auto;         /* 讓高度依比例自動 */
+      object-fit: contain;  /* 完整顯示圖片，不裁切 */
+      background:#edf2f3;
+      border-radius: 10px;
+      box-shadow: 0 4px 18px #a5dee51f;
+      border: 1px solid #eaeff0;
+      display: block;
+    }
+
+    .detail-content{
+      font-size: 17px;
+      color:#345960;
+      line-height: 1.9;
+      white-space: pre-wrap;
+    }
+    .detail-back{
+      display:inline-block;
+      margin-top: 24px;
+      color:#167bc2;
+      font-weight:700;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="detail-wrap">
+    <div id="detailTitle" class="detail-title">載入中…</div>
+    <div id="detailDate" class="detail-date"></div>
+
+    <!-- 改：用容器放多張圖 -->
+    <div id="detailImages" class="detail-images"></div>
+
+    <div id="detailContent" class="detail-content"></div>
+    <a class="detail-back" href="index.html">← 回首頁</a>
+  </div>
+
+  <script>
+    // 這份資料和首頁一致（可之後改成 fetch JSON）
+    const announcements = [
+      {
+        id: 1,
+        title: '【公告】114年暑假借還書注意事項與開館公告',
+        date: '2024/04/11',
+        content: `114 年暑假期間借還書與開館時間調整如下…如有臨時異動以現場與網站公告為主。`,
+        images: [
+          '114summer back.png',
+          '114summer.png'
+        ]
+      },
+      {
+        id: 2,
+        title: '圖書館第22期電子報',
+        date: '2024/08/11',
+        content: `本期電子報內容包含：新書推薦、資料庫上手技巧、活動預告與回顧。`,
+        images: [
+          '22.1.png',
+          '22.2.png',
+          '22.3.png'
+        ]
+      },
+      {
+        id: 3,
+        title: '圖書館第24期電子報',
+        date: '2024/05/22',
+        content: `第 24 期電子報出刊！更多資源應用與館員精選書單等你看～`,
+        image: 'images/anno-3.jpg'
+      },
+      {
+        id: 4,
+        title: '【公告】113端午節開閉館公告',
+        date: '2024/06/07',
+        content: `端午節期間開閉館時間調整如下…請留意還書與借閱到期日。`,
+        image: 'images/anno-4.jpg'
+      }
+    ];
+
+    const params = new URLSearchParams(location.search);
+    const id = Number(params.get('id'));
+    const data = announcements.find(a => a.id === id);
+
+    const $ = s => document.querySelector(s);
+
+    if (!data) {
+      $('#detailTitle').textContent = '查無此公告';
+      $('#detailDate').textContent = '';
+      $('#detailImages').innerHTML = '';
+      $('#detailContent').textContent = '這筆公告可能已下架或連結有誤。';
+    } else {
+      $('#detailTitle').textContent = data.title;
+      $('#detailDate').textContent = data.date;
+
+      const container = document.getElementById('detailImages');
+      container.innerHTML = '';
+
+      // 先看有沒有多張 images，沒有再用單張 image
+      if (Array.isArray(data.images) && data.images.length > 0) {
+        data.images.forEach(src => {
+          const img = document.createElement('img');
+          img.src = src;
+          img.alt = data.title;
+          img.className = 'detail-cover';
+          container.appendChild(img);
+        });
+      } else if (data.image) {
+        const img = document.createElement('img');
+        img.src = data.image;
+        img.alt = data.title;
+        img.className = 'detail-cover';
+        container.appendChild(img);
+      }
+
+      $('#detailContent').textContent = data.content || '';
+    }
+  </script>
+</body>
+</html>

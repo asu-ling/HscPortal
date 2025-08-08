@@ -1,31 +1,83 @@
 // ===== 主視覺輪播（首頁大圖） =====
+// ===== 主視覺輪播（首頁大圖） =====
 const visualSwiper = new Swiper('.visual-swiper', {
   loop: true,
-  navigation: {
-    nextEl: '.visual-swiper-next',
-    prevEl: '.visual-swiper-prev'
-  },
-  pagination: {
-    el: '.visual-swiper-pagination',
-    clickable: true
-  },
+  navigation: { nextEl: '.visual-swiper-next', prevEl: '.visual-swiper-prev' },
+  //pagination: { el: '.visual-swiper-pagination', clickable: true },
   autoplay: { delay: 3500, disableOnInteraction: false }
 });
 
-// ===== 最新公告 =====
-const announcements = [
-  { id: 1, title: '【公告】113年生命教育校園活動', date: '2024/04/11', url: '/announcement/20240411' },
-  { id: 2, title: '圖書館第23期電子報', date: '2024/05/02', url: '/announcement/20240502' },
-  { id: 2, title: '圖書館第24期電子報', date: '2024/05/02', url: '/announcement/20240502' },
-  { id: 3, title: '【公告】113端午節開閉館公告', date: '2024/06/07', url: '/announcement/20240607' },
+// 圖片（可加連結與文字）
+const visualSlides = [
+  {
+    src: 'action.jpg',
+    alt: '112學年度-主題研習',
+    caption: '112學年度－主題研習：生成式 AI 在教與學上的應用實例與實作',
+    link: 'https://lib.hsc.edu.tw/albumDetail/2860e00756414b03aecd16e28a960966?uuid=022d6c23c1694df9875bc9f45e753a9d#gsc.tab=0'
+  },
+  {
+    src: 'action2.jpg',
+    alt: '活動二',
+    caption: '校園閱讀推廣月：借書抽好禮',
+    link: 'https://lib.hsc.edu.tw/albumDetail/2860e00756414b03aecd16e28a960966?uuid=5a4ddfcec2fd41abad3bb4b385a7861a#gsc.tab=0'
+  },
+  {
+    src: 'action3.jpg',
+    alt: '活動三',
+    caption: '新進資料庫上線，歡迎試用',
+    link: 'https://lib.hsc.edu.tw/albumDetail/2860e00756414b03aecd16e28a960966?uuid=a25a82bbd50649dda544a1c943cd1504#gsc.tab=0'
+  }
 ];
+
+const wrapper = document.querySelector('.visual-swiper .swiper-wrapper');
+wrapper.innerHTML = visualSlides.map(s => {
+  const figureContent = `
+    <img src="${s.src}" alt="${s.alt || ''}">
+    ${s.caption ? `<figcaption class="slide-caption">${s.caption}</figcaption>` : ''}
+  `;
+  return `
+    <div class="swiper-slide">
+      <figure class="slide-figure">
+        ${s.link ? `<a href="${s.link}" target="_blank" rel="noopener noreferrer">${figureContent}</a>` : figureContent}
+      </figure>
+    </div>
+  `;
+}).join('');
+
+// 通知 Swiper 重新計算
+visualSwiper.update();
+visualSwiper.pagination.render();
+visualSwiper.pagination.update();
+
+
+
+
+
+// ===== 最新公告 =====
+// ===== 最新公告（連到 announcement.html）=====
+// ===== 最新公告 =====
+// id 請唯一，且要和 announcements.html 內的資料一致
+const announcements = [
+  { id: 1, title: '【公告】114年暑假借還書注意事項與開館公告', date: '2025/08/11' },
+  { id: 2, title: '圖書館第22期電子報',                     date: '2025/05/02' },
+  { id: 3, title: '圖書館第24期電子報',                     date: '2024/05/22' },
+  { id: 4, title: '【公告】113端午節開閉館公告',               date: '2024/06/07' },
+];
+
 const ul = document.getElementById('announcement-list');
+ul.innerHTML = '';
+
 announcements.forEach(a => {
   const li = document.createElement('li');
+  li.className = 'announcement-item';
   li.innerHTML = `
     <span class="date">${a.date}</span>
-    <a href="${a.url}" title="${a.title}">${a.title}</a>
-    <button class="announce-action-btn" title="更多資訊">
+    <!-- 標題連結 -->
+    <a class="announcement-link" href="./announcements.html?id=${a.id}" title="${a.title}">
+      ${a.title}
+    </a>
+    <!-- 右側圓形按鈕，也是一個 <a> -->
+    <a class="announce-action-btn" href="./announcements.html?id=${a.id}" aria-label="閱讀全文">
       <svg width="28" height="28" viewBox="0 0 38 38" fill="none">
         <circle cx="19" cy="19" r="18" fill="#fff" stroke="#e2e6ea" stroke-width="2"/>
         <g stroke="#169bc9" stroke-width="2" fill="none" stroke-linecap="round">
@@ -36,19 +88,37 @@ announcements.forEach(a => {
           <path d="M19 12a7 7 0 0 0-7 7"/>
         </g>
       </svg>
-    </button>
+    </a>
   `;
   ul.appendChild(li);
 });
+
+// ⚠️ 刪掉舊的 click 事件（那個 alert），避免攔住連結導向
+
+// 把原本監聽按鈕並 alert 的這段刪掉：
+// ul.addEventListener('click', ...  alert(...) ... );
+
+// ul.addEventListener('click', function(e) {
+//   const btn = e.target.closest('.announce-action-btn');
+//   if (btn) {
+//     const li = btn.closest('li');
+//     const index = Array.from(ul.children).indexOf(li);
+//     const announce = announcements[index];
+//     alert('你點了公告功能按鈕：\n' + (announce ? announce.title : '未知公告'));
+//   }
+// }); ---->
 ul.addEventListener('click', function(e) {
   const btn = e.target.closest('.announce-action-btn');
   if (btn) {
     const li = btn.closest('li');
     const index = Array.from(ul.children).indexOf(li);
     const announce = announcements[index];
-    alert('你點了公告功能按鈕：\n' + (announce ? announce.title : '未知公告'));
+    if (announce) {
+      location.href = `./announcements.html?id=${announce.id}`;
+    }
   }
 });
+
 
 // ===== 焦點新書輪播 =====
 /*
