@@ -134,7 +134,7 @@ const books = [
   {
     title: '疼痛、復健與肌力訓練...',
     author: '亞斯',
-    cover: 'book1.jpg',
+    cover: 'books1.jpg',
     pubYear: '2023',
     publisher: '知書出版社',
     callNo: '610.7 1000 2023',
@@ -144,7 +144,7 @@ const books = [
   {
     title: '（圖解版）鍛鍊體幹的正確知識',
     author: '中野．詹姆士．修一',
-    cover: 'book2.jpg',
+    cover: 'books2.jpg',
     pubYear: '2022',
     publisher: '健康文化',
     callNo: '610.8 1001 2022',
@@ -154,7 +154,7 @@ const books = [
   {
     title: '用微運動整頓身心',
     author: '李婉寧',
-    cover: 'book3.jpg',
+    cover: 'books3.jpg',
     pubYear: '2021',
     publisher: '楓葉社文化',
     callNo: '411.7 8776 2023',
@@ -164,7 +164,7 @@ const books = [
   {
     title: '神奇的自力整體',
     author: '矢上真理惠',
-    cover: 'book4.jpg',
+    cover: 'books4.jpg',
     pubYear: '2019',
     publisher: '新經典',
     callNo: '610.9 1003 2019',
@@ -174,7 +174,7 @@ const books = [
   {
     title: '最新新書範例',
     author: '新作者',
-    cover: 'book5.jpg',
+    cover: 'books5.jpg',
     pubYear: '2020',
     publisher: '測試出版社',
     callNo: '610.0 1004 2020',
@@ -224,7 +224,7 @@ const themeBooks = [
   {
     title: '夢魂之地',
     author: '平路',
-    cover: 'theme1.jpg',
+    cover: 'books3.png',
     pubYear: '2023',
     publisher: '聯經出版',
     callNo: '863.55 8776 2023',
@@ -254,7 +254,7 @@ const themeBooks = [
   {
     title: '沉月之鑰(第一部)',
     author: '作者未知',
-    cover: 'theme4.jpg',
+    cover: 'theme1.png',
     pubYear: '2019',
     publisher: '新經典',
     callNo: '863.59 8779 2019',
